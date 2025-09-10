@@ -56,7 +56,7 @@ def main():
         }
     ]
 
-    allocation(applicants)
+    pretty_print(allocation(applicants))
 
 
 def allocation(applicants: dict):
@@ -210,8 +210,34 @@ def allocation(applicants: dict):
         if not assigned:
             print(f"No available lockers for applicant {applicant['sNumber']}. This should not happen.")
     print(f"Final assigned lockers: {assigned_lockers}")
+    return assigned_lockers
 
 
+def pretty_print(assigned_lockers: dict) -> None:
+    """Pretty print the assigned lockers with ascii art in a grid format."""
+    # (0,0) is bottom left, (rows, columns)
+    available_lockers = {
+        "LZ": {
+            "rows": 4,
+            "columns": 3,
+            "excluded": []
+        },
+        "Lounge": {
+            "rows": 4,
+            "columns": 4,
+            "excluded": [(3,0)]
+        }
+    }
+    for locker_type, locker_info in available_lockers.items():
+        print(f"\nLocker Type: {locker_type}")
+        grid = [["[ ]" for _ in range(locker_info["columns"])] for _ in range(locker_info["rows"])]
+        for row, col in locker_info["excluded"]:
+            grid[row][col] = " X "
+        for row, col, user_id in assigned_lockers.get(locker_type, []):
+            grid[row][col] = f"[{user_id}]"
+        for r in reversed(range(locker_info["rows"])):
+            print(" ".join(grid[r]))
+    print("\n")
 
 if __name__ == "__main__":
     main()
