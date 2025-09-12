@@ -1,0 +1,21 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Wish {
+  id             Int      @id @default(autoincrement())
+  sNumber        String
+  lockerLocation String?
+  lockerRow      Int?
+  confirmed      Boolean  @default(false)
+  confirmToken   String   @unique
+  createdAt      DateTime @default(now())
+}
