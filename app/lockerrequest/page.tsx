@@ -1,27 +1,27 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 
 export default function LockerRequestPage() {
-  const [submitted, setSubmitted] = useState(false)
+  const [submitted, setSubmitted] = useState(false);
 
   async function handleSubmit(formData: FormData) {
-    const res = await fetch('/lockerrequest/api', {
-      method: 'POST',
+    const res = await fetch("/lockerrequest/api", {
+      method: "POST",
       body: JSON.stringify({
-        sNumber: formData.get('sNumber'),
-        lockerLocation: formData.get('lockerLocation'),
-        lockerRow: formData.get('lockerRow'),
+        sNumber: formData.get("sNumber"),
+        lockerLocation: formData.get("lockerLocation"),
+        lockerRow: formData.get("lockerRow"),
       }),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    })
-    if (res.ok) setSubmitted(true)
+    });
+    if (res.ok) setSubmitted(true);
   }
 
   if (submitted) {
-    return <p>Anfrage gespeichert!</p>
+    return <p>Anfrage gespeichert!</p>;
   }
 
   return (
@@ -55,5 +55,5 @@ export default function LockerRequestPage() {
         Absenden
       </button>
     </form>
-  )
+  );
 }
