@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,5 +12,5 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </header>
       <main className="p-8">{children}</main>
     </div>
-  )
+  );
 }

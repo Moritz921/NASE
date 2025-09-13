@@ -1,7 +1,7 @@
-'use client'  // <-- WICHTIG für Interaktivität
+"use client";  // <-- WICHTIG für Interaktivität
 
-import { useEffect, useState } from "react"
-import { getSession } from "next-auth/react"
+import { useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
 
 interface Wish {
   id: number
@@ -13,67 +13,67 @@ interface Wish {
 }
 
 export default function AdminPage() {
-  const [session, setSession] = useState<any>(null)
-  const [wishes, setWishes] = useState<Wish[]>([])
-  const [loading, setLoading] = useState(true)
+  const [session, setSession] = useState<any>(null);
+  const [wishes, setWishes] = useState<Wish[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Session abrufen
   useEffect(() => {
     async function loadSession() {
         try {
-        const res = await fetch("/admin/api/auth/session", { cache: "no-store" })
-        const data = await res.json()
-        setSession(data)
+        const res = await fetch("/admin/api/auth/session", { cache: "no-store" });
+        const data = await res.json();
+        setSession(data);
         } catch (e) {
-        console.error("Session fetch failed", e)
-        setSession(null)
+        console.error("Session fetch failed", e);
+        setSession(null);
         }
     }
-    loadSession()
-    }, [])
+    loadSession();
+    }, []);
 
 
   // Wishes laden
   useEffect(() => {
     async function fetchWishes() {
         try {
-        const res = await fetch("/admin/api/wishes", { cache: "no-store" })
-        if (!res.ok) throw new Error("Fetch failed")
-        const data = await res.json()
-        setWishes(data)
+        const res = await fetch("/admin/api/wishes", { cache: "no-store" });
+        if (!res.ok) throw new Error("Fetch failed");
+        const data = await res.json();
+        setWishes(data);
         } catch (e) {
-        console.error("Fehler beim Laden der Wishes:", e)
-        setWishes([])
+        console.error("Fehler beim Laden der Wishes:", e);
+        setWishes([]);
         } finally {
-        setLoading(false)
+        setLoading(false);
         }
     }
-    fetchWishes()
-    }, [])
+    fetchWishes();
+    }, []);
 
   // Dev-Fallback
-  const devUser = { email: "dev@fs.uni-frankfurt.de", name: "Dev User" }
-  const user = session?.user ?? (process.env.NODE_ENV === "development" ? devUser : null)
+  const devUser = { email: "dev@fs.uni-frankfurt.de", name: "Dev User" };
+  const user = session?.user ?? (process.env.NODE_ENV === "development" ? devUser : null);
 
   if (!user) {
     return (
       <div className="p-8">
         <p>Du musst dich zuerst <a href="/admin/api/auth/signin" className="text-blue-600 underline">einloggen</a>.</p>
       </div>
-    )
+    );
   }
 
   const handleResend = async (id: number) => {
-    await fetch(`/admin/api/wish/${id}/resend`, { method: "POST" })
-    alert("Mail erneut verschickt")
-  }
+    await fetch(`/admin/api/wish/${id}/resend`, { method: "POST" });
+    alert("Mail erneut verschickt");
+  };
 
   const handleDelete = async (id: number) => {
-    if (!confirm("Wirklich löschen?")) return
-    await fetch(`/admin/api/wish/${id}/delete`, { method: "DELETE" })
-    alert("Eintrag gelöscht. Seite neu laden!")
-    setWishes(prev => prev.filter(w => w.id !== id))
-  }
+    if (!confirm("Wirklich löschen?")) return;
+    await fetch(`/admin/api/wish/${id}/delete`, { method: "DELETE" });
+    alert("Eintrag gelöscht. Seite neu laden!");
+    setWishes(prev => prev.filter(w => w.id !== id));
+  };
 
   return (
     <div className="min-h-screen p-8 bg-gray-50 dark:bg-gray-900">
@@ -136,5 +136,5 @@ export default function AdminPage() {
         </a>
       </footer>
     </div>
-  )
+  );
 }

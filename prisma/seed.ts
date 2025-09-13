@@ -11,26 +11,54 @@ async function main() {
     await prisma.wish.createMany({
     data: [
       {
-        sNumber: "s12345",
+        sNumber: "s1234567",
         lockerLocation: "Lounge",
         lockerRow: 1,
         confirmToken: "token123",
         confirmed: false,
       },
       {
-        sNumber: "s67890",
+        sNumber: "s8901234",
         lockerLocation: "LZ",
         lockerRow: 2,
         confirmToken: "token456",
         confirmed: true,
       },
       {
-        sNumber: "s54321",
+        sNumber: "s5432167",
         lockerLocation: "Lounge",
         lockerRow: 3,
         confirmToken: "token789",
         confirmed: false,
       },
+      {
+        sNumber: "s7654321",
+        lockerLocation: "LZ",
+        lockerRow: 1,
+        confirmToken: "token",
+        confirmed: true,
+      },
+      {
+        sNumber: "s1122334",
+        lockerLocation: "LZ",
+        lockerRow: 1,
+        confirmToken: "token1122334",
+        confirmed: true,
+      },
+      {
+        sNumber: "s2233445",
+        lockerLocation: "LZ",
+        lockerRow: 1,
+        confirmToken: "token2233445",
+        confirmed: true,
+      },
+      {
+        sNumber: "s3344556",
+        lockerLocation: "LZ",
+        lockerRow: 1,
+        confirmToken: "token3344556",
+        confirmed: true,
+      }
     ],
   })
 
