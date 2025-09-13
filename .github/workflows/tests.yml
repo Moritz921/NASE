@@ -45,8 +45,5 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
-      - name: Seed Prisma DB
-        run: npx prisma db seed
-
       - name: Run tests
         run: npm run test -- --ci
