@@ -7,7 +7,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <h1 className="text-xl font-bold">Admin Dashboard</h1>
         <nav className="mt-2">
           <Link href="/admin" className="mr-4 hover:underline">Home</Link>
-          <Link href="/admin/api/auth/signout" className="hover:underline">Logout</Link>
+          <Link href="/api/auth/signout" className="hover:underline">Logout</Link>
         </nav>
       </header>
       <main className="p-8">{children}</main>

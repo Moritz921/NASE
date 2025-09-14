@@ -21,10 +21,14 @@ export default function LockerRequestPage() {
   }, []);
 
   async function handleSubmit(formData: FormData) {
-    const lockerRow = formData.get("lockerRow")?.toString() || null;
+    // const lockerRow = formData.get("lockerRow")?.toString() || null;
     const lockerLocation = formData.get("lockerLocation")?.toString() || null;
 
-    const body: Record<string, any> = {
+    const body: {
+      sNumber: FormDataEntryValue | null;
+      lockerLocation?: string;
+      lockerRow?: number;
+    } = {
       sNumber: formData.get("sNumber"),
     };
     if (lockerLocation) body.lockerLocation = lockerLocation;
@@ -74,7 +78,7 @@ export default function LockerRequestPage() {
       <button
         type="submit"
         className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-        disabled={!formHasSNumber(selectedLocker)}
+        // disabled={!formHasSNumber(selectedLocker)}
       >
         Submit
       </button>
@@ -82,9 +86,9 @@ export default function LockerRequestPage() {
   );
 }
 
-// Helper function to control button activation
-function formHasSNumber(selectedLocker: [number, number] | null) {
-  // We only activate if a locker is selected or s-number is entered
-  // The form submit checks sNumber anyway
-  return true;
-}
+// // Helper function to control button activation
+// function formHasSNumber(selectedLocker: [number, number] | null) {
+//   // We only activate if a locker is selected or s-number is entered
+//   // The form submit checks sNumber anyway
+//   return true;
+// }
