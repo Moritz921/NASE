@@ -1,7 +1,7 @@
-"use client";  // <-- WICHTIG für Interaktivität
+"use client";  // for interactivity
 
 import { useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
+import Link from "next/link";
 
 interface Wish {
   id: number
@@ -13,7 +13,7 @@ interface Wish {
 }
 
 export default function AdminPage() {
-  const [session, setSession] = useState<any>(null);
+  const [session, setSession] = useState<{ user?: { email: string; name?: string } } | null>(null);
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,7 +58,7 @@ export default function AdminPage() {
   if (!user) {
     return (
       <div className="p-8">
-        <p>Du musst dich zuerst <a href="/admin/api/auth/signin" className="text-blue-600 underline">einloggen</a>.</p>
+        <p>Du musst dich zuerst <Link href="/admin/api/auth/signin" className="text-blue-600 underline">einloggen</Link>.</p>
       </div>
     );
   }
@@ -128,12 +128,12 @@ export default function AdminPage() {
       )}
 
       <footer className="mt-8">
-        <a
+        <Link
           href="/admin/api/auth/signout"
           className="inline-block mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
         >
           Logout
-        </a>
+        </Link>
       </footer>
     </div>
   );
