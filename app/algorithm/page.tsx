@@ -35,8 +35,18 @@ function assignLockers(requests: Request[]): LockerAssignment[] {
 
   useEffect(() => {
     (async () => {
-      const pseudoHtml = await codeToHtml(pseudocode, { lang: "text", theme: "nord" });
-      const tsHtml = await codeToHtml(tsCode, { lang: "ts", theme: "nord" });
+      const pseudoHtml = await codeToHtml(pseudocode, { 
+        lang: "text",
+        themes: {
+            light: "catppuccin-latte",
+            dark: "catppuccin-frappe"
+        } });
+      const tsHtml = await codeToHtml(tsCode, {
+        lang: "typescript",
+        themes: {
+            light: "catppuccin-latte",
+            dark: "catppuccin-frappe"
+        } });
 
       setHtmlPseudo(pseudoHtml);
       setHtmlTS(tsHtml);
@@ -70,17 +80,17 @@ function assignLockers(requests: Request[]): LockerAssignment[] {
         <div className="w-full max-w-2xl">
             <Tabs>
                 <TabList className="flex border-b border-gray-700 space-x-2">
-                    <Tab className="px-4 py-2 cursor-pointer">Pseudocode</Tab>
+                    <Tab className="px-4 py-2 cursor-pointer">TypeScript</Tab>
                     <Tab disabled className="px-4 py-2 text-gray-400 cursor-not-allowed">
                         Python
                     </Tab>
-                    <Tab className="px-4 py-2 cursor-pointer">TypeScript</Tab>
+                    <Tab className="px-4 py-2 cursor-pointer">Pseudocode</Tab>
                 </TabList>
 
                 <TabPanel>
                     <div
                         className="rounded-b-xl overflow-x-auto shadow-lg border border-gray-700 w-full max-w-full sm:max-w-3xl p-4"
-                        dangerouslySetInnerHTML={{ __html: htmlPseudo }}
+                        dangerouslySetInnerHTML={{ __html: htmlTS }}
                     />
                 </TabPanel>
                 <TabPanel>
@@ -91,7 +101,7 @@ function assignLockers(requests: Request[]): LockerAssignment[] {
                 <TabPanel>
                     <div
                         className="rounded-b-xl overflow-x-auto shadow-lg border border-gray-700 w-full max-w-full sm:max-w-3xl p-4"
-                        dangerouslySetInnerHTML={{ __html: htmlTS }}
+                        dangerouslySetInnerHTML={{ __html: htmlPseudo }}
                     />
                 </TabPanel>
             </Tabs>
