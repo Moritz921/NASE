@@ -113,6 +113,22 @@ export default function Home() {
           />
           Go to Homepage →
         </a>
+        <a
+            className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+            href="https://github.com/Moritz921/NASE"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            <Image
+            aria-hidden
+            className="dark:invert"
+            src="/github.svg"
+            alt="GitHub Icon"
+            width={16}
+            height={16}
+            />
+            View source on GitHub →
+        </a>
       </footer>
     </div>
   );
