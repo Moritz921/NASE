@@ -17,7 +17,7 @@
     "nodemailer": "^6.10.1",
     "prisma": "^6.16.1",
     "quoted-printable": "^1.0.1",
-    "react": "19.1.0",
+    "react": "19.1.1",
     "react-dom": "19.1.0"
   },
   "devDependencies": {
