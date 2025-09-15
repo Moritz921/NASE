@@ -34,7 +34,7 @@ export default function LockerGrid({ rows, cols, forbidden = [], onSelect }: Loc
               className={`w-10 h-10 border flex items-center justify-center cursor-pointer 
                 ${forbiddenCell ? "bg-gray-400 cursor-not-allowed" : isSelected ? "bg-blue-500 text-white" : "bg-white"}`}
             >
-              {r}-{c}
+              {String.fromCharCode(65 + r)}{c + 1}
             </div>
           );
         })
