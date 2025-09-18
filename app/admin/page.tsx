@@ -1,88 +1,104 @@
-"use client";  // for interactivity
+"use client";
 
+import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 interface Wish {
-  id: number
-  sNumber: string
-  lockerLocation: string | null
-  lockerRow: number | null
-  confirmed: boolean
-  createdAt: string
+  id: number;
+  sNumber: string;
+  lockerLocation: string | null;
+  lockerRow: number | null;
+  confirmed: boolean;
+  createdAt: string;
 }
 
 export default function AdminPage() {
-  const [session, setSession] = useState<{ user?: { email: string; name?: string } } | null>(null);
+  const { data: session, status } = useSession();
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // Session abrufen
-  useEffect(() => {
-    async function loadSession() {
-        try {
-        const res = await fetch("/admin/api/auth/session", { cache: "no-store" });
-        const data = await res.json();
-        setSession(data);
-        } catch (e) {
-        console.error("Session fetch failed", e);
-        setSession(null);
-        }
-    }
-    loadSession();
-    }, []);
-
 
   // Wishes laden
   useEffect(() => {
     async function fetchWishes() {
-        try {
-        const res = await fetch("/admin/api/wishes", { cache: "no-store" });
+      try {
+        const res = await fetch("/api/wishes", { cache: "no-store" });
         if (!res.ok) throw new Error("Fetch failed");
         const data = await res.json();
         setWishes(data);
-        } catch (e) {
+      } catch (e) {
         console.error("Fehler beim Laden der Wishes:", e);
         setWishes([]);
-        } finally {
+      } finally {
         setLoading(false);
-        }
+      }
     }
-    fetchWishes();
-    }, []);
+    if (session?.user) {
+      fetchWishes();
+    }
+  }, [session]);
 
-  // Dev-Fallback
-  const devUser = { email: "dev@fs.uni-frankfurt.de", name: "Dev User" };
-  const user = session?.user ?? (process.env.NODE_ENV === "development" ? devUser : null);
+  // Status prüfen
+  if (status === "loading") {
+    return <p className="p-8">Session wird geladen...</p>;
+  }
 
-  if (!user) {
+  if (!session?.user) {
     return (
-      <div className="p-8">
-        <p>Du musst dich zuerst <Link href="/admin/api/auth/signin" className="text-blue-600 underline">einloggen</Link>.</p>
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="bg-white dark:bg-gray-800 p-10 rounded-2xl shadow-lg w-full max-w-sm text-center">
+          <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">
+            Willkommen im Admin-Bereich
+          </h1>
+          <p className="mb-6 text-gray-600 dark:text-gray-300">
+            Bitte melde dich über Authentik an
+          </p>
+          <button
+            onClick={() => signIn("authentik", { callbackUrl: "/admin" })}
+            className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zM10.5 17l-4.5-5.25L10.5 6h3v4.5h3V6h3l-4.5 5.25L16.5 17h-3v-4.5h-3V17h-3z"/>
+            </svg>
+            Mit Authentik anmelden
+          </button>
+        </div>
       </div>
     );
   }
 
+  // TODO: needs to be checked with authentik groups
+  // if (session?.user?.groups?.includes("authentik Admins")) {
+  //   // only allow users in "authentik Admins" group
+  //   return <p className="p-8">Kein Zugriff</p>;
+  // }
+
   const handleResend = async (id: number) => {
-    await fetch(`/admin/api/wish/${id}/resend`, { method: "POST" });
+    await fetch(`/api/wish/${id}/resend`, { method: "POST" });
     alert("Mail erneut verschickt");
   };
 
   const handleDelete = async (id: number) => {
     if (!confirm("Wirklich löschen?")) return;
-    await fetch(`/admin/api/wish/${id}/delete`, { method: "DELETE" });
+    await fetch(`/api/wish/${id}/delete`, { method: "DELETE" });
     alert("Eintrag gelöscht. Seite neu laden!");
-    setWishes(prev => prev.filter(w => w.id !== id));
+    setWishes((prev) => prev.filter((w) => w.id !== id));
   };
 
   return (
     <div className="min-h-screen p-8 bg-gray-50 dark:bg-gray-900">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Admin Dashboard</h1>
-        <p className="text-gray-600 dark:text-gray-300">Angemeldet als: {user.email}</p>
-        {process.env.NODE_ENV === "development" && (
-          <p className="text-sm text-green-600 mt-1">Dev-Login aktiv</p>
-        )}
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+          Admin Dashboard
+        </h1>
+        <p className="text-gray-600 dark:text-gray-300">
+          Angemeldet als: {session.user.email} <br />
+          (Gruppen: {session.user.groups?.join(", ") || "keine"})
+        </p>
       </header>
 
       {loading ? (
@@ -100,13 +116,20 @@ export default function AdminPage() {
             </tr>
           </thead>
           <tbody>
-            {wishes.map(w => (
-              <tr key={w.id} className="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800">
+            {wishes.map((w) => (
+              <tr
+                key={w.id}
+                className="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800"
+              >
                 <td className="border px-2 py-1">{w.sNumber}</td>
                 <td className="border px-2 py-1">{w.lockerLocation ?? "-"}</td>
                 <td className="border px-2 py-1">{w.lockerRow ?? "-"}</td>
-                <td className="border px-2 py-1">{w.confirmed ? "Ja" : "Nein"}</td>
-                <td className="border px-2 py-1">{new Date(w.createdAt).toLocaleString()}</td>
+                <td className="border px-2 py-1">
+                  {w.confirmed ? "Ja" : "Nein"}
+                </td>
+                <td className="border px-2 py-1">
+                  {new Date(w.createdAt).toLocaleString()}
+                </td>
                 <td className="border px-2 py-1 flex gap-2">
                   <button
                     className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs"
@@ -128,12 +151,12 @@ export default function AdminPage() {
       )}
 
       <footer className="mt-8">
-        <Link
-          href="/admin/api/auth/signout"
-          className="inline-block mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        <button
+          onClick={() => signOut()}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
         >
           Logout
-        </Link>
+        </button>
       </footer>
     </div>
   );
