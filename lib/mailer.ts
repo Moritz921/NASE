@@ -1,6 +1,6 @@
-import nodemailer from "nodemailer";
+import nodemailer, { Transporter } from "nodemailer";
 
-export function getTransporter() {
+export function getTransporter(): Transporter {
     if (process.env.NODE_ENV === "production") {
         return nodemailer.createTransport({
             host: process.env.SMTP_HOST,
