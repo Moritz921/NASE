@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import Form from "next/form";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +15,8 @@ export default function LockerRequestPage() {
   const [submitted, setSubmitted] = useState(false);
   const [selectedLocker] = useState<[number, number] | null>(null);
   const [lockerData, setLockerData] = useState<LockerData>({ forbidden: [] });
+  const t = useTranslations("RequestPage");
+  const t_c = useTranslations("Constants");
 
   // load locker data from JSON file
   useEffect(() => {
@@ -66,14 +69,14 @@ export default function LockerRequestPage() {
             />
           <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
             <div className="max-w-md mx-auto p-6 bg-white rounded shadow space-y-4">
-              <h1 className="text-xl font-bold">Antrag eingereicht</h1>
+              <h1 className="text-xl font-bold">{t("submitted.title")}</h1>
               <p>
-                Dein Antrag wurde aufgenommen. Um ihn zu bestätigen, klicke bitte auf den
-                Link in der <strong>Bestätigungs-E-Mail</strong>, die wir dir gerade geschickt haben.
-                Falls du keine E-Mail erhältst, überprüfe bitte auch deinen Spam-Ordner.
+                {t("submitted.text1")}{" "}
+                <strong>{t("submitted.text2")} </strong>
+                {t("submitted.text3")}
                 <br />
                 <br />
-                Falls du Fragen hast, melde dich gerne bei uns unter{" "}
+                {t("submitted.text4")}{" "}
                 <a
                   href="mailto:fsinf@uni-frankfurt.de"
                   className="text-blue-600 hover:underline"
@@ -95,7 +98,7 @@ export default function LockerRequestPage() {
                 width={16}
                 height={16}
               />
-              How-To Request
+              {t_c("HowTo-Page")}
             </a>
             <a
               className="flex items-center gap-2 hover:underline hover:underline-offset-4"
@@ -108,7 +111,7 @@ export default function LockerRequestPage() {
                 width={16}
                 height={16}
               />
-              Algorithm
+              {t_c("Algorithm-Page")}
             </a>
             <a
               className="flex items-center gap-2 hover:underline hover:underline-offset-4"
@@ -153,18 +156,18 @@ export default function LockerRequestPage() {
               action={handleSubmit}
               className="max-w-md mx-auto p-6 bg-white rounded shadow space-y-4"
             >
-              <h1 className="text-xl font-bold">Schließfach beantragen</h1>
+              <h1 className="text-xl font-bold">{t("title")}</h1>
 
               <input
                 name="sNumber"
                 type="text"
-                placeholder="s-Nummer"
+                placeholder={t("sNumberPlaceholder")}
                 required
                 className="w-full border rounded p-2"
               />
 
               <select name="lockerLocation" className="w-full border rounded p-2">
-                <option value="">-- Ort auswählen (optional) --</option>
+                <option value="">{t("lockerLocationPlaceholder")}</option>
                 <option value="Lounge">Lounge</option>
                 <option value="LZ">LZ</option>
               </select>
@@ -172,13 +175,13 @@ export default function LockerRequestPage() {
               <input
                 name="row"
                 type="number"
-                placeholder="Reihe (optional)"
+                placeholder={t("rowPlaceholder")}
                 min={1}
                 max={5}
                 className="w-full border rounded p-2"
               />
 
-              <p>Schrank auswählen (optional):</p>
+              <p>{t("graphicalSelection")}:</p>
               <LockerGrid
                 rows={5}
                 cols={6}
@@ -195,7 +198,7 @@ export default function LockerRequestPage() {
                 className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
                 // disabled={!formHasSNumber(selectedLocker)}
               >
-                Submit
+                {t("submitButton")}
               </button>
             </Form>
           </main>
@@ -212,7 +215,7 @@ export default function LockerRequestPage() {
                 width={16}
                 height={16}
                 />
-                Home
+                {t_c("Home-Page")}
             </Link>
             <a
               className="flex items-center gap-2 hover:underline hover:underline-offset-4"
@@ -225,7 +228,7 @@ export default function LockerRequestPage() {
                 width={16}
                 height={16}
               />
-              How-To Request
+              {t_c("HowTo-Page")}
             </a>
             <a
               className="flex items-center gap-2 hover:underline hover:underline-offset-4"
@@ -238,7 +241,7 @@ export default function LockerRequestPage() {
                 width={16}
                 height={16}
               />
-              Algorithm
+              {t_c("Algorithm-Page")}
             </a>
             <a
               className="flex items-center gap-2 hover:underline hover:underline-offset-4"

@@ -2,13 +2,34 @@
     "HomePage": {
         "title": "Schließfachverwaltung"
     },
+    "RequestPage": {
+        "submitted": {
+            "title": "Antrag eingereicht",
+            "text1": "Dein Antrag wurde aufgenommen. Um ihn zu bestätigen, klicke bitte auf den Link in der",
+            "text2": "Bestätigungs-E-Mail",
+            "text3": ", die wir dir gerade geschickt haben. Falls du keine E-Mail erhältst, überprüfe bitte auch deinen Spam-Ordner.",
+            "text4": "Falls du Fragen hast, melde dich gerne bei uns unter "
+        },
+        "title": "Schließfach beantragen",
+        "sNumberPlaceholder": "s-Nummer mit 's'",
+        "lockerLocationPlaceholder": "Ort auswählen (optional)",
+        "rowPlaceholder": "Reihe (optional)",
+        "graphicalSelection": "Graphische Auswahl (optional)",
+        "submitButton": "Anfrage senden"
+    },
     "Howto": {
         "title": "How to beantragen eines Schließfachs",
         "step1": "Klicke auf \"Schließfach beantragen\" um ein Schließfach zu beantragen.",
-        "step2": "Gib deine s-Nummer ein (ohne \"s\") und optional deinen Wunschstandort und deine Wunschreihe.",
+        "step2": "Gib deine s-Nummer ein (mit \"s\") und optional deinen Wunschstandort und deine Wunschreihe.",
         "step3": "Klicke auf \"Anfrage senden\". Du erhältst eine E-Mail an deine stud.uni-frankfurt.de-Adresse.",
         "step4": "Öffne die E-Mail und klicke auf den Bestätigungslink, um deine Anfrage zu bestätigen.",
         "step5": "Warte auf die Zuteilung deines Schließfachs. Du wirst per E-Mail benachrichtigt.",
         "step6": "Am Ende des Semesters musst du dein Schließfach räumen."
+    },
+    "Constants": {
+        "RequestButton": "Schließfach beantragen",
+        "HowTo-Page": "How to beantragen eines Schließfachs",
+        "Home-Page": "Startseite",
+        "Algorithm-Page": "Algorithmus"
     }
 }
