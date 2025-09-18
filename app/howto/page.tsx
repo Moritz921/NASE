@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function Home() {
+  const t = useTranslations("Howto");
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <Image
@@ -22,27 +24,26 @@ export default function Home() {
         />
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <h1 className="text-2xl font-bold text-center sm:text-left">
-            How to beantragen eines Schließfachs
+            {t("title")}
         </h1>
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
             <li className="mb-2 tracking-[-.01em]">
-                Klicke auf &quot;Schließfach beantragen&quot; um ein Schließfach zu beantragen.
+                {t("step1")}
             </li>
             <li className="mb-2 tracking-[-.01em]">
-                Gib deine s-Nummer ein (ohne &quot;s&quot;) und optional deinen Wunschstandort und deine Wunschreihe.
+                {t("step2")}
             </li>
             <li className="mb-2 tracking-[-.01em]">
-                Klicke auf &quot;Anfrage senden&quot;. Du erhältst eine E-Mail an deine stud.uni-frankfurt.de-Adresse.
+                {t("step3")}
             </li>
             <li className="mb-2 tracking-[-.01em]">
-                Öffne die E-Mail und klicke auf den Bestätigungslink, um deine Anfrage zu bestätigen.
+                {t("step4")}
             </li>
             <li className="tracking-[-.01em]">
-                Warte auf die Zuteilung deines Schließfachs. Du wirst per E-Mail benachrichtigt, sobald dir ein Schließfach
-                zugewiesen wurde. Wie du Zugriff auf dein Schließfach erhältst, erfährst du in der E-Mail.
+                {t("step5")}
             </li>
             <li className="mt-2 tracking-[-.01em]">
-                Am Ende des Semesters musst du dein Schließfach räumen. Weitere Informationen dazu findest du in der E-Mail.
+                {t("step6")}
             </li>
         </ol>
         

@@ -1,0 +1,14 @@
+{
+    "HomePage": {
+        "title": "Locker Management"
+    },
+    "Howto": {
+        "title": "How to request a locker",
+        "step1": "Click on \"Request locker\" to request a locker.",
+        "step2": "Enter your s-number (without the \"s\") and optionally your preferred location and row.",
+        "step3": "Click on \"Send request\". You will receive an email at your stud.uni-frankfurt.de address.",
+        "step4": "Open the email and click on the confirmation link to verify your request.",
+        "step5": "Wait for the locker assignment. You will be notified by email.",
+        "step6": "At the end of the semester you must empty your locker."
+    }
+}

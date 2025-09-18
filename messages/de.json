@@ -1,0 +1,14 @@
+{
+    "HomePage": {
+        "title": "Schließfachverwaltung"
+    },
+    "Howto": {
+        "title": "How to beantragen eines Schließfachs",
+        "step1": "Klicke auf \"Schließfach beantragen\" um ein Schließfach zu beantragen.",
+        "step2": "Gib deine s-Nummer ein (ohne \"s\") und optional deinen Wunschstandort und deine Wunschreihe.",
+        "step3": "Klicke auf \"Anfrage senden\". Du erhältst eine E-Mail an deine stud.uni-frankfurt.de-Adresse.",
+        "step4": "Öffne die E-Mail und klicke auf den Bestätigungslink, um deine Anfrage zu bestätigen.",
+        "step5": "Warte auf die Zuteilung deines Schließfachs. Du wirst per E-Mail benachrichtigt.",
+        "step6": "Am Ende des Semesters musst du dein Schließfach räumen."
+    }
+}
