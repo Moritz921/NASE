@@ -17,6 +17,11 @@
         "graphicalSelection": "Graphical selection (optional)",
         "submitButton": "Send request"
     },
+    "SucessfulRequstPage": {
+        "title": "Your locker request has been successfully submitted",
+        "text1": "You will receive an email once the lockers have been assigned.",
+        "text2": "For further questions, feel free to contact "
+    },
     "Howto": {
         "title": "How to request a locker",
         "step1": "Click on \"Request locker\" to request a locker.",

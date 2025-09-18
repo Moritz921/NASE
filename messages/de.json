@@ -17,6 +17,11 @@
         "graphicalSelection": "Graphische Auswahl (optional)",
         "submitButton": "Anfrage senden"
     },
+    "SucessfulRequstPage": {
+        "title": "Dein Schließfach-Antrag wurde erfolgreich eingereicht",
+        "text1": "Du bekommst eine Mail, sobald die Schließfächer zugeordnet wurden.",
+        "text2": "Für weitere Fragen wende dich gerne an "
+    },
     "Howto": {
         "title": "How to beantragen eines Schließfachs",
         "step1": "Klicke auf \"Schließfach beantragen\" um ein Schließfach zu beantragen.",
