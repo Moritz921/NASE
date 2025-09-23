@@ -60,7 +60,24 @@ async function main() {
         confirmed: true,
       }
     ],
-  })
+  });
+
+  await prisma.locker.deleteMany();
+
+  const lockers: any[] = [];
+  for (let row = 1; row <= 4; row++) {
+    for (let col = 1; col <= 4; col++) {
+      lockers.push({ location: "Lounge", row, col });
+    }
+  }
+  const lockersLZ: any[] = [];
+  for (let row = 1; row <= 4; row++) {
+    for (let col = 1; col <= 3; col++) {
+      lockersLZ.push({ location: "LZ", row, col });
+    }
+  }
+
+  await prisma.locker.createMany({ data: [...lockers, ...lockersLZ] });
 
     console.log("Database has been seeded.");
 }
