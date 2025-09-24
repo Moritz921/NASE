@@ -20,7 +20,7 @@ export default function LockerRequestPage() {
 
   // load locker data from JSON file
   useEffect(() => {
-    fetch("/lockerData.json")
+    fetch("@/lib/lockerData.json")
       .then((res) => res.json())
       .then((data) => setLockerData(data))
       .catch(() => console.warn("Error loading locker data"));

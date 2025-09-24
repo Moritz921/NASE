@@ -10,6 +10,15 @@ interface Wish {
   lockerRow: number | null;
   confirmed: boolean;
   createdAt: string;
+  published: boolean;
+  assignedLocker?: Locker | null;
+}
+
+interface Locker {
+  id: number;
+  location: string;
+  row: number;
+  col: number;
 }
 
 export default function AdminPage() {
@@ -113,6 +122,7 @@ export default function AdminPage() {
               <th className="border px-2 py-1">Bestätigt</th>
               <th className="border px-2 py-1">Erstellt</th>
               <th className="border px-2 py-1">Aktionen</th>
+              <th className="border px-2 py-1">Zuweisung</th>
             </tr>
           </thead>
           <tbody>
@@ -144,11 +154,51 @@ export default function AdminPage() {
                     Löschen
                   </button>
                 </td>
+                <td className="border px-2 py-1">
+                  {w.assignedLocker
+                    ? `${w.assignedLocker.location} R${w.assignedLocker.row}C${w.assignedLocker.col}`
+                    : "-"}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
+
+      <div className="mt-8 flex gap-4">
+        <button
+          onClick={async () => {
+            if (!confirm("Alle Wishes jetzt automatisch zuordnen?")) return;
+            const res = await fetch("/api/admin/assign", { method: "POST" });
+            if (res.ok) {
+              alert("Zuteilung erfolgreich!");
+              location.reload();
+            } else {
+              const data = await res.json();
+              alert("Fehler: " + (data.error || "Unbekannt"));
+            }
+          }}
+          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        >
+          Zuteilen
+        </button>
+
+        <button
+          onClick={async () => {
+            if (!confirm("Alle Zuweisungen zurücksetzen?")) return;
+            const res = await fetch("/api/admin/reset-assignments", { method: "POST" });
+            if (res.ok) {
+              alert("Alle Zuweisungen zurückgesetzt!");
+              location.reload();
+            } else {
+              alert("Fehler beim Zurücksetzen");
+            }
+          }}
+          className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
+        >
+          Zurücksetzen
+        </button>
+      </div>
 
       <footer className="mt-8">
         <button

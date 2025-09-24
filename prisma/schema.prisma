@@ -11,11 +11,22 @@ datasource db {
 }
 
 model Wish {
-  id             Int      @id @default(autoincrement())
-  sNumber        String
-  lockerLocation String?
-  lockerRow      Int?
-  confirmed      Boolean  @default(false)
-  confirmToken   String   @unique
-  createdAt      DateTime @default(now())
+  id                 Int      @id @default(autoincrement())
+  sNumber            String
+  lockerLocation     String?
+  lockerRow          Int?
+  confirmed          Boolean  @default(false)
+  confirmToken       String   @unique
+  createdAt          DateTime @default(now())
+  published          Boolean  @default(false)
+  assignedLockerId   Int?     @unique
+  assignedLocker     Locker?  @relation(fields: [assignedLockerId], references: [id])
+}
+
+model Locker {
+  id        Int      @id @default(autoincrement())
+  location  String
+  row       Int
+  col       Int
+  wish      Wish?
 }

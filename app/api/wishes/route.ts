@@ -3,7 +3,9 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const wishes = await prisma.wish.findMany({
-    orderBy: { createdAt: "desc" },
+    include: { assignedLocker: true },
+    orderBy: { createdAt: "asc" },
   });
+
   return NextResponse.json(wishes);
 }
