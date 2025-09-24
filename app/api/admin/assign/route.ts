@@ -2,19 +2,6 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 import lockerDataJson from "@/lib/lockerData.json";
-// const data: LockerDataJson = lockerDataJson;
-
-type Locker = {
-  id: number;
-  name: string;
-  rows: number;
-  columns: number;
-  forbidden: [number, number][];
-};
-
-type LockerDataJson = {
-  lockers: Locker[];
-};
 
 export async function POST() {
   if (!lockerDataJson || !lockerDataJson.lockers) {
@@ -93,7 +80,6 @@ export async function POST() {
     let assigned = false;
     for (const locker of shuffledLockers) {
       // Check if locker is not excluded (based on lockerDataJson)
-      // const lockerInfo = (lockerDataJson as LockerDataJson)[lockerType];
       const lockerInfo = lockerDataJson.lockers.find(l => l.name === lockerType);
       const isExcluded =
         lockerInfo &&
@@ -140,7 +126,6 @@ export async function POST() {
         let assigned = false;
         for (const locker of shuffledLockers) {
             // Check if locker is not excluded (based on lockerDataJson)
-            // const lockerInfo = (lockerDataJson as any)[lockerType];
             const lockerInfo = lockerDataJson.lockers.find(l => l.name === lockerType);
             const isExcluded =
                 lockerInfo &&
@@ -185,7 +170,6 @@ export async function POST() {
         let assigned = false;
         for (const locker of shuffledLockers) {
             // Check if locker is not excluded (based on lockerDataJson)
-            // const lockerInfo = (lockerDataJson as any)[locker.location];
             const lockerInfo = lockerDataJson.lockers.find(l => l.name === locker.location);
             const isExcluded =
                 lockerInfo &&
@@ -228,12 +212,12 @@ export async function POST() {
         let assigned = false;
         for (const locker of shuffledLockers) {
             // Check if locker is not excluded (based on lockerDataJson)
-            const lockerInfo = (lockerDataJson as any)[locker.location];
+            const lockerInfo = lockerDataJson.lockers.find(l => l.name === locker.location);
             const isExcluded =
                 lockerInfo &&
-                Array.isArray(lockerInfo.excluded) &&
-                lockerInfo.excluded.some(
-                    ([exRow, exCol]: [number, number]) =>
+                Array.isArray(lockerInfo.forbidden) &&
+                lockerInfo.forbidden.some(
+                    ([exRow, exCol]) =>
                         exRow === locker.row && exCol === locker.col
                 );
             if (!isExcluded) {
@@ -254,15 +238,6 @@ export async function POST() {
     }
 
     console.log("Assignment complete.");
-
-  // TODO: better assignment algorithm, see: proof_of_concept.py
-  // assign lockers to wishes
-//   for (let i = 0; i < wishes.length; i++) {
-//     await prisma.wish.update({
-//       where: { id: wishes[i].id },
-//       data: { assignedLockerId: lockers[i].id },
-//     });
-//   }
 
   return NextResponse.json({ success: true });
 }

@@ -149,7 +149,7 @@ async function main() {
       {
         sNumber: "s1819201",
         lockerLocation: "Lounge",
-        lockerRow: 1,
+        lockerRow: 4,
         confirmToken: "token1819201",
         confirmed: false,
       },
@@ -177,7 +177,7 @@ async function main() {
       {
         sNumber: "s2223241",
         lockerLocation: "Lounge",
-        lockerRow: 3,
+        lockerRow: 4,
         confirmToken: "token2223241",
         confirmed: false,
       },
@@ -191,7 +191,7 @@ async function main() {
       {
         sNumber: "s2425261",
         lockerLocation: "Lounge",
-        lockerRow: 2,
+        lockerRow: 4,
         confirmToken: "token2425261",
         confirmed: false,
       },
@@ -205,7 +205,7 @@ async function main() {
       {
         sNumber: "s2627281",
         lockerLocation: "Lounge",
-        lockerRow: 1,
+        lockerRow: 4,
         confirmToken: "token2627281",
         confirmed: false,
       },
