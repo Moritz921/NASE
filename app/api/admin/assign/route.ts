@@ -2,8 +2,27 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 import lockerDataJson from "@/lib/lockerData.json";
+// const data: LockerDataJson = lockerDataJson;
+
+type Locker = {
+  id: number;
+  name: string;
+  rows: number;
+  columns: number;
+  forbidden: [number, number][];
+};
+
+type LockerDataJson = {
+  lockers: Locker[];
+};
 
 export async function POST() {
+  if (!lockerDataJson || !lockerDataJson.lockers) {
+    return NextResponse.json(
+      { error: "Locker data not found or invalid" },
+      { status: 500 }
+    );
+  }
   // select each wish that is not assigned yet
   const wishes = await prisma.wish.findMany({
     orderBy: { createdAt: "asc" },
@@ -74,12 +93,13 @@ export async function POST() {
     let assigned = false;
     for (const locker of shuffledLockers) {
       // Check if locker is not excluded (based on lockerDataJson)
-      const lockerInfo = (lockerDataJson as any)[lockerType];
+      // const lockerInfo = (lockerDataJson as LockerDataJson)[lockerType];
+      const lockerInfo = lockerDataJson.lockers.find(l => l.name === lockerType);
       const isExcluded =
         lockerInfo &&
-        Array.isArray(lockerInfo.excluded) &&
-        lockerInfo.excluded.some(
-          ([exRow, exCol]: [number, number]) =>
+        Array.isArray(lockerInfo.forbidden) &&
+        lockerInfo.forbidden.some(
+          ([exRow, exCol]) =>
            exRow === locker.row && exCol === locker.col
         );
 
@@ -120,14 +140,15 @@ export async function POST() {
         let assigned = false;
         for (const locker of shuffledLockers) {
             // Check if locker is not excluded (based on lockerDataJson)
-            const lockerInfo = (lockerDataJson as any)[lockerType];
+            // const lockerInfo = (lockerDataJson as any)[lockerType];
+            const lockerInfo = lockerDataJson.lockers.find(l => l.name === lockerType);
             const isExcluded =
                 lockerInfo &&
-                Array.isArray(lockerInfo.excluded) &&
-                lockerInfo.excluded.some(
-                    ([exRow, exCol]: [number, number]) =>
-                        exRow === locker.row && exCol === locker.col
-                );
+                Array.isArray(lockerInfo.forbidden) &&
+                lockerInfo.forbidden.some(
+                                    ([exRow, exCol]) =>
+                                        exRow === locker.row && exCol === locker.col
+                                );
             if (!isExcluded) {
                 // Assign locker to wish
                 await prisma.wish.update({
@@ -164,14 +185,15 @@ export async function POST() {
         let assigned = false;
         for (const locker of shuffledLockers) {
             // Check if locker is not excluded (based on lockerDataJson)
-            const lockerInfo = (lockerDataJson as any)[locker.location];
+            // const lockerInfo = (lockerDataJson as any)[locker.location];
+            const lockerInfo = lockerDataJson.lockers.find(l => l.name === locker.location);
             const isExcluded =
                 lockerInfo &&
-                Array.isArray(lockerInfo.excluded) &&
-                lockerInfo.excluded.some(
-                    ([exRow, exCol]: [number, number]) =>
-                        exRow === locker.row && exCol === locker.col
-                );
+                Array.isArray(lockerInfo.forbidden) &&
+                lockerInfo.forbidden.some(
+                                    ([exRow, exCol]) =>
+                                        exRow === locker.row && exCol === locker.col
+                                );
             if (!isExcluded) {
                 // Assign locker to wish
                 await prisma.wish.update({
