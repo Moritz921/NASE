@@ -5,7 +5,7 @@
             "name": "Lounge",
             "rows": 4,
             "columns": 4,
-            "forbidden": [[3, 0]]
+            "forbidden": [[4, 1]]
         },
         {
             "id": 1,
