@@ -80,12 +80,6 @@ export default function AdminPage() {
     );
   }
 
-  // TODO: needs to be checked with authentik groups
-  // if (session?.user?.groups?.includes("authentik Admins")) {
-  //   // only allow users in "authentik Admins" group
-  //   return <p className="p-8">Kein Zugriff</p>;
-  // }
-
   const handleResend = async (id: number) => {
     await fetch(`/api/wish/${id}/resend`, { method: "POST" });
     alert("Mail erneut verschickt");
@@ -199,6 +193,78 @@ export default function AdminPage() {
           Zurücksetzen
         </button>
       </div>
+
+      {/* Visualization */}
+      <div className="mt-8">
+        <h2 className="text-xl font-bold mb-4">Schließfach-Übersicht</h2>
+
+        <div className="flex flex-col gap-6">
+          {Object.entries(
+            wishes.reduce((acc, w) => {
+              // group by location
+              const loc = w.assignedLocker?.location ?? "Unknown";
+              if (!acc[loc]) acc[loc] = [];
+              acc[loc].push(w);
+              return acc;
+            }, {} as Record<string, typeof wishes>)
+          ).map(([location, lockers]) => {
+            // calc max row/col
+            const maxRow = Math.max(...lockers.map(l => l.assignedLocker?.row ?? 0));
+            const maxCol = Math.max(...lockers.map(l => l.assignedLocker?.col ?? 0));
+
+            // 2D-Array for grid
+            const grid: (typeof lockers[0] | null)[][] = Array.from(
+              { length: maxRow },
+              () => Array(maxCol).fill(null)
+            );
+            lockers.forEach(l => {
+              if (l.assignedLocker) {
+                grid[l.assignedLocker.row - 1][l.assignedLocker.col - 1] = l;
+              }
+            });
+
+            return (
+              <div key={location}>
+                <h3 className="text-lg font-semibold mb-2">{location}</h3>
+                <div className="inline-block border border-gray-400 dark:border-gray-600 p-2 bg-white dark:bg-gray-800">
+                  <div
+                    className="grid gap-1"
+                    style={{
+                      gridTemplateColumns: `repeat(${maxCol}, 6rem)` // jede Spalte 6rem breit
+                    }}
+                  >
+                    {Array.from({ length: maxRow }).map((_, rIdx) =>
+                      Array.from({ length: maxCol }).map((_, cIdx) => {
+                        const rowIndex = maxRow - rIdx; // statt rIdx+1 von oben → jetzt von unten
+                        const colIndex = cIdx + 1;
+
+                        const locker = lockers.find(
+                          (l) => l.assignedLocker?.row === rowIndex && l.assignedLocker?.col === colIndex
+                        );
+
+                        return (
+                          <div
+                            key={`${rowIndex}-${colIndex}`}
+                            className={`h-12 flex items-center justify-center border border-gray-300 dark:border-gray-700
+                              ${locker ? "bg-green-200 dark:bg-green-700" : "bg-gray-100 dark:bg-gray-900"}
+                            `}
+                          >
+                            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                              {locker ? locker.sNumber : "-"}
+                            </span>
+                          </div>
+                        );
+                      })
+                    )}
+
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
 
       <footer className="mt-8">
         <button
