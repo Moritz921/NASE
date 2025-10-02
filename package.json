@@ -18,7 +18,7 @@
     "prisma": "^6.16.2",
     "quoted-printable": "^1.0.1",
     "react": "19.2.0",
-    "react-dom": "19.1.1",
+    "react-dom": "19.2.0",
     "react-tabs": "^6.1.0",
     "shiki": "^3.13.0"
   },
