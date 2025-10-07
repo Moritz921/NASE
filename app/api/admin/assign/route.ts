@@ -24,15 +24,8 @@ export async function POST() {
 
   let nr_available_lockers = 0;
   for (const lockerType in lockerDataJson.lockers) {
-    console.log("Processing locker type:", lockerDataJson.lockers[lockerType].name);
-    console.log("Rows:", lockerDataJson.lockers[lockerType].rows);
-    console.log("Columns:", lockerDataJson.lockers[lockerType].columns);
-    console.log("Forbidden:", lockerDataJson.lockers[lockerType].forbidden);
     nr_available_lockers += (lockerDataJson.lockers[lockerType].rows * lockerDataJson.lockers[lockerType].columns) - lockerDataJson.lockers[lockerType].forbidden.length;
   };
-
-  console.log("Total wishes before assignment:", wishes.length);
-  console.log("Total available lockers:", nr_available_lockers);
 
   // if there are not enough lockers, select random wishes
   if (nr_available_lockers < wishes.length) {
@@ -54,12 +47,6 @@ export async function POST() {
   const wishes_with_no_preference = wishes.filter(
     (wish) => !wish.lockerLocation && !wish.lockerRow
   );
-
-  console.log("Total wishes to assign:", wishes.length);
-  console.log("Wishes with location and row:", wishes_with_location_and_row.length);
-  console.log("Wishes with location only:", wishes_with_location_only.length);
-  console.log("Wishes with row only:", wishes_with_row_only.length);
-  console.log("Wishes with no preference:", wishes_with_no_preference.length);
 
   // try to assign the wishes with location and row first
   for (const wish of wishes_with_location_and_row) {
@@ -170,7 +157,9 @@ export async function POST() {
         let assigned = false;
         for (const locker of shuffledLockers) {
             // Check if locker is not excluded (based on lockerDataJson)
-            const lockerInfo = lockerDataJson.lockers.find(l => l.name === locker.location);
+            const lockerInfo = lockerDataJson.lockers.find(
+              l => l.name === locker.location
+            );
             const isExcluded =
                 lockerInfo &&
                 Array.isArray(lockerInfo.forbidden) &&

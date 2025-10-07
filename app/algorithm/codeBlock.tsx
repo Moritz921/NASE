@@ -13,7 +13,7 @@ export default function CodeBlock({ code, language }: { code: string; language: 
 
     return (
         <div
-            className="rounded-lg shadow bg-gray-900 p-4 text-sm overflow-x-auto"
+            className="rounded-lg shadow bg-gray-900 p-4 text-sm"
             dangerouslySetInnerHTML={{ __html: html }}
         />
     );
