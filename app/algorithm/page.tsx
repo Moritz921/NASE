@@ -12,54 +12,63 @@ export default function AlgorithmTabs() {
   const [htmlTS, setHtmlTS] = useState("");
 
   const pseudocode = `
-Let $n$ be the number of lockers available for all lockers minus the lockers
-that are not available ('fobidden' in 'lib/lockerData.json') and $S$ the set
-of all students that want a locker.
+Let $n$ be the number of lockers available for all lockers
+minus the lockers that are not available ('fobidden' in
+'lib/lockerData.json') and $S$ the set of all students that
+want a locker.
 
-1. If $|S| > n$ then randomly select a subset of size $n$ from $S$ and replace
-   $S$ with this subset.
+1. If $|S| > n$ then randomly select a subset of size $n$
+   from $S$ and replace $S$ with this subset.
 2. Shuffle $S$ randomly.
 3. Create four subsets of $S$:
-   1. $S_{LR}$: Students that wish to get a locker in a specific locker cabinet
-      and on a specific row.
-   2. $S_{L}$: Students that wish to get a locker in a specific locker cabinat
-      but have no preference for a specific row.
-   3. $S_{R}$: Students that wish to get a locker on a specific row but have no
-      preference for a specific locker cabinet.
-   4. $S_{N}$: Students that have no preference for a specific locker cabinet
-      or row.
+   1. $S_{LR}$: Students that wish to get a locker in a
+      specific locker cabinet and on a specific row.
+   2. $S_{L}$: Students that wish to get a locker in a
+      specific locker cabinet but have no preference for
+      a specific row.
+   3. $S_{R}$: Students that wish to get a locker on a
+      specific row but have no preference for a specific
+      locker cabinet.
+   4. $S_{N}$: Students that have no preference for a
+      specific locker cabinet or row.
 4. For each student in $S_{LR}$ in the order of $S_{LR}$:
-   1. If there is at least one locker available in the specified locker cabinet
-      and row:
-      1. Shuffle the available lockers in the specified locker cabinet and row
-         randomly.
-      2. Assign the first locker in the shuffled list to the student and mark
-         it as assigned.
+   1. If there is at least one locker available in the
+      specified locker cabinet and row:
+      1. Shuffle the available lockers in the specified
+         locker cabinet and row randomly.
+      2. Assign the first locker in the shuffled list to
+         the student and mark it as assigned.
    2. Else:
-      1. Remove the row preference of the student and move them to $S_{L}$.
+      1. Remove the row preference of the student and move
+         them to $S_{L}$.
    3. Continue with the next student in $S_{LR}$.
 5. For each student in $S_{L}$ in the order of $S_{L}$:
-   1. If there is at least one locker available in the specified cabinet:
-      1. Shuffle the available lockers in the specified locker cabinet randomly
-      2. Assign the first locker in the shuffled list to the student and mark
-         it as assigned.
+   1. If there is at least one locker available in the
+      specified cabinet:
+      1. Shuffle the available lockers in the specified
+         locker cabinet randomly
+      2. Assign the first locker in the shuffled list to
+         the student and mark it as assigned.
    2. Else:
-      1. Remove the locker cabinet preference of the student and move them to
-         $S_{N}$.
+      1. Remove the locker cabinet preference of the
+         student and move them to $S_{N}$.
    3. Continue with the next student in $S_{L}$.
 6. For each student in $S_{R}$ in the order of $S_{R}$:
-   1. If there is at least one locker available on the specified row:
-      1. Shuffle the available lockers on the specified row randomly.
-      2. Assign the first locker in the shuffled list to the student and mark
-         it as assigned.
+   1. If there is at least one locker available on the
+      specified row:
+      1. Shuffle the available lockers on the specified
+         row randomly.
+      2. Assign the first locker in the shuffled list to
+         the student and mark it as assigned.
    2. Else:
-      1. Remove the row preference of the student and move them to $S_{N}$.
+      1. Remove the row preference of the student and move
+         them to $S_{N}$.
    3. Continue with the next student in $S_{R}$.
 7. For each student in $S_{N}$ in the order of $S_{N}$:
    1. If there is at least one locker available:
       1. Shuffle the available lockers randomly.
-      2. Assign the first locker in the shuffled list to the student and mark
-         it as assigned.
+      2. Assign the first locker in the shuffled list to
+         the student and mark it as assigned.
    2. Continue with the next student in $S_{N}$.
 8. End.
 `;
@@ -79,7 +88,8 @@ const lockers = await prisma.locker.findMany({
 
 let nr_available_lockers = 0;
 for (const lockerType in lockerDataJson.lockers) {
-  nr_available_lockers += (lockerDataJson.lockers[lockerType].rows
+  nr_available_lockers += (lockerDataJson.lockers[lockerType]
+      .rows
     * lockerDataJson.lockers[lockerType].columns) 
     - lockerDataJson.lockers[lockerType].forbidden.length;
 };
@@ -91,8 +101,8 @@ if (nr_available_lockers < wishes.length) {
 }
 wishes.sort(() => Math.random() - 0.5);
 
-// create 4 groups of wishes: with location and row, with location only, with
-// row only, with no preference
+// create 4 groups of wishes: with location and row, with
+// location only, with row only, with no preference
 const wishes_with_location_and_row = wishes.filter(
   (wish) => wish.lockerLocation && wish.lockerRow
 );
@@ -111,7 +121,8 @@ for (const wish of wishes_with_location_and_row) {
   const lockerType = wish.lockerLocation;
   const row = wish.lockerRow;
 
-  // Find lockers matching the location and row, and not already assigned
+  // Find lockers matching the location and row, and not
+  // already assigned
   const availableLockers = lockers.filter(
     (locker) =>
       locker.location === lockerType &&
@@ -120,12 +131,15 @@ for (const wish of wishes_with_location_and_row) {
   );
 
   // Shuffle columns for randomness
-  const shuffledLockers = availableLockers.sort(() => Math.random() - 0.5);
+  const shuffledLockers = availableLockers.sort(() 
+                          => Math.random() - 0.5);
 
   let assigned = false;
   for (const locker of shuffledLockers) {
     // Check if locker is not excluded (based on lockerDataJson)
-    const lockerInfo = lockerDataJson.lockers.find(l => l.name === lockerType);
+    const lockerInfo = lockerDataJson.lockers.find(
+      l => l.name === lockerType
+    );
     const isExcluded =
       lockerInfo &&
       Array.isArray(lockerInfo.forbidden) &&
@@ -148,8 +162,8 @@ for (const wish of wishes_with_location_and_row) {
   }
 
   if (!assigned) {
-    // No available lockers in row for this wish, remove row preference and add
-    // to wishes_with_location_only
+    // No available lockers in row for this wish, remove row
+    // preference and add to wishes_with_location_only
     wishes_with_location_only.push({
       ...wish,
       lockerRow: null,
@@ -160,7 +174,8 @@ for (const wish of wishes_with_location_and_row) {
 // then try to assign wishes with location only
   for (const wish of wishes_with_location_only) {
       const lockerType = wish.lockerLocation;
-      // Find lockers matching the location, and not already assigned
+      // Find lockers matching the location, and not
+      // already assigned
       const availableLockers = lockers.filter(
           (locker) =>
               locker.location === lockerType &&
@@ -168,17 +183,23 @@ for (const wish of wishes_with_location_and_row) {
       );
       
       // Shuffle columns for randomness
-      const shuffledLockers = availableLockers.sort(() => Math.random() - 0.5);
+      const shuffledLockers = availableLockers.sort(
+        () => Math.random() - 0.5
+      );
       let assigned = false;
       for (const locker of shuffledLockers) {
-          // Check if locker is not excluded (based on lockerDataJson)
-          const lockerInfo = lockerDataJson.lockers.find(l => l.name === lockerType);
+          // Check if locker is not excluded
+          // (based on lockerDataJson)
+          const lockerInfo = lockerDataJson.lockers.find(
+            l => l.name === lockerType
+          );
           const isExcluded =
               lockerInfo &&
               Array.isArray(lockerInfo.forbidden) &&
               lockerInfo.forbidden.some(
                                   ([exRow, exCol]) =>
-                                      exRow === locker.row && exCol === locker.col
+                                    exRow === locker.row
+                                    && exCol === locker.col
                               );
           if (!isExcluded) {
               // Assign locker to wish
@@ -193,8 +214,9 @@ for (const wish of wishes_with_location_and_row) {
           }
       }
       if (!assigned) {
-          // No available lockers in location for this wish, remove location
-          // preference and add to wishes_with_row_only
+          // No available lockers in location for this wish,
+          // remove location preference and add to
+          // wishes_with_row_only
           wishes_with_row_only.push({
               ...wish,
               lockerLocation: null,
@@ -205,7 +227,8 @@ for (const wish of wishes_with_location_and_row) {
   // then try to assign wishes with row only
   for (const wish of wishes_with_row_only) {
       const row = wish.lockerRow;
-      // Find lockers matching the row, and not already assigned
+      // Find lockers matching the row, and not
+      // already assigned
       const availableLockers = lockers.filter(
           (locker) =>
               locker.row === row &&
@@ -213,17 +236,23 @@ for (const wish of wishes_with_location_and_row) {
       );
       
       // Shuffle columns for randomness
-      const shuffledLockers = availableLockers.sort(() => Math.random() - 0.5);
+      const shuffledLockers = availableLockers.sort(
+        () => Math.random() - 0.5
+      );
       let assigned = false;
       for (const locker of shuffledLockers) {
-          // Check if locker is not excluded (based on lockerDataJson)
-          const lockerInfo = lockerDataJson.lockers.find(l => l.name === locker.location);
+          // Check if locker is not excluded
+          // (based on lockerDataJson)
+          const lockerInfo = lockerDataJson.lockers.find(
+            l => l.name === locker.location
+          );
           const isExcluded =
               lockerInfo &&
               Array.isArray(lockerInfo.forbidden) &&
               lockerInfo.forbidden.some(
                                   ([exRow, exCol]) =>
-                                    exRow === locker.row && exCol === locker.col
+                                    exRow === locker.row
+                                    && exCol === locker.col
                               );
           if (!isExcluded) {
               // Assign locker to wish
@@ -238,8 +267,9 @@ for (const wish of wishes_with_location_and_row) {
           }
       }
       if (!assigned) {
-          // No available lockers in row for this wish, remove row preference
-          // and add to wishes_with_no_preference
+          // No available lockers in row for this wish,
+          // remove row preference and add to
+          // wishes_with_no_preference
           wishes_with_no_preference.push({
               ...wish,
               lockerRow: null,
@@ -256,10 +286,13 @@ for (const wish of wishes_with_location_and_row) {
       );
       
       // Shuffle columns for randomness
-      const shuffledLockers = availableLockers.sort(() => Math.random() - 0.5);
+      const shuffledLockers = availableLockers.sort(
+        () => Math.random() - 0.5
+      );
       let assigned = false;
       for (const locker of shuffledLockers) {
-          // Check if locker is not excluded (based on lockerDataJson)
+          // Check if locker is not excluded
+          // (based on lockerDataJson)
           const lockerInfo = lockerDataJson.lockers.find(
             l => l.name === locker.location
           );
@@ -268,7 +301,8 @@ for (const wish of wishes_with_location_and_row) {
               Array.isArray(lockerInfo.forbidden) &&
               lockerInfo.forbidden.some(
                   ([exRow, exCol]) =>
-                      exRow === locker.row && exCol === locker.col
+                      exRow === locker.row
+                      && exCol === locker.col
               );
           if (!isExcluded) {
               // Assign locker to wish
@@ -283,7 +317,9 @@ for (const wish of wishes_with_location_and_row) {
           }
       }
       if (!assigned) {
-          console.log("Could not assign locker to wish id:", wish.id);
+          console.log(
+            "Could not assign locker to wish id:", wish.id
+          );
       }
   }
 
@@ -330,7 +366,7 @@ for (const wish of wishes_with_location_and_row) {
         priority
       />
 
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full">
+      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full sm:max-w-2xl">
         <p>Der Algorithmus ist wie folgt aufgebaut:</p>
 
         {/* Code Block */}
@@ -346,7 +382,7 @@ for (const wish of wishes_with_location_and_row) {
 
                 <TabPanel>
                     <div
-                        className="rounded-b-xl overflow-x-auto shadow-lg border border-gray-700 w-full max-w-full sm:max-w-4xl p-4"
+                        className="rounded-b-xl overflow-x-auto shadow-lg border border-gray-700 w-full max-w-full sm:max-w-2xl p-4"
                         dangerouslySetInnerHTML={{ __html: htmlTS }}
                     />
                 </TabPanel>
@@ -357,7 +393,7 @@ for (const wish of wishes_with_location_and_row) {
                 </TabPanel>
                 <TabPanel>
                     <div
-                        className="rounded-b-xl overflow-x-auto shadow-lg border border-gray-700 w-full max-w-full sm:max-w-4xl p-4"
+                        className="rounded-b-xl overflow-x-auto shadow-lg border border-gray-700 w-full max-w-full sm:max-w-2xl p-4"
                         dangerouslySetInnerHTML={{ __html: htmlPseudo }}
                     />
                 </TabPanel>
