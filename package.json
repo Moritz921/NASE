@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.17.1",
-    "next": "15.5.5",
+    "next": "16.0.4",
     "next-auth": "^4.24.11",
     "nodemailer": "^6.10.1",
     "prisma": "^6.17.1",
